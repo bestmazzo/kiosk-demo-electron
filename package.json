@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://github.com/syedhassaanahmed/kiosk-demo-electron"
   },
-  "main": "./src/index.js",
+  "main": "./src/app.js",
   "config": {
     "binaries": "./dist/kiosk-demo-electron-win32-x64",
     "wix": "wine ./node_modules/wixtoolset-compiler/bin"

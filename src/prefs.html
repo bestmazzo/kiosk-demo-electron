@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    Prefs
+    <script>
+    const {ipcRenderer} = require('electron')
+
+    var button = document.createElement('button')
+    button.textContent = 'Hide'
+    button.addEventListener('click', function () {
+      ipcRenderer.send('toggle-prefs', document.getElementById('data').value)
+    });
+    document.body.appendChild(button)
+
+    var input= document.createElement('input')
+    input.id = 'data'
+    input.value = 'hello!'
+    document.body.appendChild(input)
+
+    </script>
+  </body>
+</html>
