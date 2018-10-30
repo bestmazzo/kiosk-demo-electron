@@ -3,8 +3,29 @@
     <title></title>
   </head>
   <body>
-    Main
     <script>require('./main.js')</script>
-    <h1 id="message"></h1>
+    <script>
+    const ipc = require('electron').ipcRenderer;
+
+    var button = document.createElement('button')
+    button.textContent = 'Detach'
+    button.addEventListener('click', function () {
+      var cont = document.getElementById('secondary').innerHTML
+      console.log("SENDING", cont)
+      ipc.send('detach', cont)
+      document.getElementById('secondary').innerHTML = ''
+    });
+    document.body.appendChild(button)
+  </script>
+    <div id="primary">
+      Primary area
+      <input class="input" type="text" id="write"/>
+      <h4 class="message"></h4>
+    </div>
+    <div id="secondary">
+      Secondary area
+      <input class="input" type="text" id="write"/>
+      <h4 class="message"></h4>
+    </div>
   </body>
 </html>

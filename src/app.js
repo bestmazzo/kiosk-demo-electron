@@ -8,21 +8,27 @@ app.on('ready', function () {
   mainWindow.loadURL('file://' + __dirname + '/main.html')
   mainWindow.openDevTools()
 
-  var prefsWindow = new BrowserWindow({
+  var secondaryWindow = new BrowserWindow({
     width: 400,
     height: 400,
     show: false
   })
-  prefsWindow.loadURL('file://' + __dirname + '/prefs.html')
+  secondaryWindow.loadURL('file://' + __dirname + '/prefs.html')
 
-  ipcMain.on('toggle-prefs', function (sender, data) {
-    if (prefsWindow.isVisible()) {
-      prefsWindow.hide()
-      console.log(data)
-      mainWindow.webContents.send('input',data);
-      // send event to mainwindow
-    } else {
-      prefsWindow.show()
+  ipcMain.on('detach', function (sender, data) {
+    secondaryWindow.webContents.send('populate', data)
+    secondaryWindow.show()
+  })
+
+  ipcMain.on('attach', function (sender, data) {
+    mainWindow.webContents.send('populate', data)
+    secondaryWindow.hide()
+  })
+
+  ipcMain.on('message', function (sender, data) {
+    mainWindow.webContents.send('message', data)
+    if (secondaryWindow.isVisible()){
+      secondaryWindow.webContents.send('message', data)
     }
   })
 

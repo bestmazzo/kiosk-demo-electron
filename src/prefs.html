@@ -3,22 +3,19 @@
     <title></title>
   </head>
   <body>
-    Prefs
+    <script>require('./main.js')</script>
     <script>
-    const {ipcRenderer} = require('electron')
+    const ipc = require('electron').ipcRenderer;
 
     var button = document.createElement('button')
-    button.textContent = 'Hide'
+    button.textContent = 'Attach'
     button.addEventListener('click', function () {
-      ipcRenderer.send('toggle-prefs', document.getElementById('data').value)
+      var cont = document.getElementById('secondary').innerHTML
+      ipc.send('attach', cont)
+      document.getElementById('secondary').textContent = ''
     });
     document.body.appendChild(button)
-
-    var input= document.createElement('input')
-    input.id = 'data'
-    input.value = 'hello!'
-    document.body.appendChild(input)
-
     </script>
+    <div id="secondary"></div>
   </body>
 </html>

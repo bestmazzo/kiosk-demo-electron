@@ -1,24 +1,31 @@
-const {remote, ipcRenderer} = require('electron')
-const {Menu, MenuItem} = remote
-
-const menu = new Menu()
 const ipc = require('electron').ipcRenderer;
-ipc.on('input', (event, message) => {
-    console.log(message); // logs out "Hello second window!"
-    document.getElementById('message').textContent = message
+ipc.on('message', (event, message) => {
+  console.log(message); // logs out "Hello second window!"
+  var x = document.getElementsByClassName('message')
+  for (var i = 0; i < x.length; i++) {
+    console.log("appending to element", x[i], message)
+    var div= document.createElement('div')
+    div.textContent = message
+    x[i].appendChild(div)
+  }
 })
-menu.append(new MenuItem(
-  {
-    label: 'Electron',
-    submenu: [
-      {
-        label: 'Prefs',
-        click: function () {
-            ipcRenderer.send('toggle-prefs')
-        }
-      }
-    ]
-  })
-)
+ipc.on('populate', (event, message) => {
+  console.log("populating", message); // logs out "Hello second window!"
+  document.getElementById('secondary').innerHTML = message
+  bindevents()
+})
 
-Menu.setApplicationMenu(menu)
+var bindevents = function(){
+  var x = document.getElementsByClassName("input")
+  for (var i = 0; i < x.length; i++) {
+    x[i].addEventListener("keyup", function(event) {
+      if (event.key === "Enter") {
+        console.log(event)
+        ipc.send('message', event.srcElement.value)// Do work
+        event.srcElement.value=""
+      }
+    })
+  }
+}
+
+window.onload = bindevents
